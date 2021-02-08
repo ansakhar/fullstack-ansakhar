@@ -15,7 +15,7 @@ const blogSchema = new mongoose.Schema({
 const Blog = mongoose.model('Blog', blogSchema)
 
 const mongoUrl =
-  'mongodb+srv://fullstackas:143080Mongo@cluster0.mrl4q.mongodb.net/bloglist?retryWrites=true'
+  'mongodb+srv://fullstackas:sekred@cluster0.mrl4q.mongodb.net/bloglist?retryWrites=true'
 
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
 
