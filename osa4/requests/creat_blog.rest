@@ -2,7 +2,7 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "title": "Trio MiuMau ja herra Nilsson",
+    "title": "III",
     "author": "Joku bloger",
     "url": "https://www.blogit.fi/trio-miumau-ja-herra-nilsson",
     "likes": 187
