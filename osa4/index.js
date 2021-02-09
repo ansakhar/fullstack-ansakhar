@@ -1,23 +1,9 @@
 const http = require('http')
+require('dotenv').config()
 const express = require('express')
 const app = express()
+const Blog = require('./models/blog')
 const cors = require('cors')
-const mongoose = require('mongoose')
-
-
-const blogSchema = new mongoose.Schema({
-    title: String,
-    author: String,
-    url: String,
-    likes: Number
-})
-
-const Blog = mongoose.model('Blog', blogSchema)
-
-const mongoUrl =
-  'mongodb+srv://fullstackas:sekred@cluster0.mrl4q.mongodb.net/bloglist?retryWrites=true'
-
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
 
 app.use(cors())
 app.use(express.json())
@@ -31,14 +17,7 @@ app.get('/api/blogs', (request, response) => {
   })
 
 app.post('/api/blogs', (request, response) => {
-       
-    /*const body = request.body
 
-    const blog = new Blog({
-        title: body.title,
-        author: body.author,
-        url: body.url
-      })*/
     const blog = new Blog(request.body)
   
     blog
@@ -48,7 +27,7 @@ app.post('/api/blogs', (request, response) => {
     })
   })
 
-const PORT = 3003
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
