@@ -111,6 +111,25 @@ describe('deletion of a blog', () => {
       expect(contents).not.toContain(blogToDelete.id)
     })
   })
+
+describe('adition of a blog', () => {
+    test('a blog can be edited', async () => {
+      const blogsAtStart = await helper.blogsInDb()
+      const blogToEdit = blogsAtStart[0]
+      blogToEdit.likes = 45321
+    
+      await api
+        .put(`/api/blogs/${blogToEdit.id}`)
+        .send(blogToEdit)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+    
+      const blogsAtEnd = await helper.blogsInDb()
+    
+      expect(blogsAtEnd[0].likes).toEqual(blogToEdit.likes)
+    })
+  })
+
 })
 
 afterAll(() => {
