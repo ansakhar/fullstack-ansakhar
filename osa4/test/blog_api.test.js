@@ -79,9 +79,9 @@ test('blog without url is not added', async () => {
       }
   
     await api
-      .post('/api/notes')
+      .post('/api/blogs')
       .send(newBlog)
-      .expect(404)
+      .expect(400)
   
       const blogsAtEnd = await helper.blogsInDb()
 
