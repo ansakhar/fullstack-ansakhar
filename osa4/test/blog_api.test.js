@@ -6,6 +6,7 @@ const api = supertest(app)
 
 const Blog = require('../models/blog')
 
+describe('when there is initially some blogs saved', () => {
 beforeEach(async () => {
     await Blog.deleteMany({})
     await Blog.insertMany(helper.initialBlogs)
@@ -32,6 +33,7 @@ test('blogs are identified by id', async () => {
     expect(contents).toBeDefined()
   })
 
+  describe('addition of a new blog', () => {
 test('a valid blog can be added ', async () => {
     const newBlog = {
         title: "Hiidenkiven puutarhassa",
@@ -87,6 +89,29 @@ test('blog without url is not added', async () => {
 
       expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
   })
+})
+
+describe('deletion of a blog', () => {
+    test('a blog can be deleted', async () => {
+      const blogsAtStart = await helper.blogsInDb()
+      const blogToDelete = blogsAtStart[0]
+    
+      await api
+        .delete(`/api/blogs/${blogToDelete.id}`)
+        .expect(204)
+    
+      const blogsAtEnd = await helper.blogsInDb()
+    
+      expect(blogsAtEnd).toHaveLength(
+        helper.initialBlogs.length - 1
+      )
+    
+      const contents = blogsAtEnd.map(blog => blog.id)
+    
+      expect(contents).not.toContain(blogToDelete.id)
+    })
+  })
+})
 
 afterAll(() => {
   mongoose.connection.close()
