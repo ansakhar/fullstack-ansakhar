@@ -116,7 +116,7 @@ describe('adition of a blog', () => {
     test('a blog can be edited', async () => {
       const blogsAtStart = await helper.blogsInDb()
       const blogToEdit = blogsAtStart[0]
-      blogToEdit.likes = 45321
+      blogToEdit.likes = 45454
     
       await api
         .put(`/api/blogs/${blogToEdit.id}`)
