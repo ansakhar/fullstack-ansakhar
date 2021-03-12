@@ -16,13 +16,8 @@ usersRouter.post('/', async (request, response) => {
     passwordHash,
   })
 
-  if (body.username === undefined) {
-    response.status(400).json({error:"username missing"})
-  } else{
-
   const savedUser = await user.save()
   response.json(savedUser)
-  }
 }
 })
 

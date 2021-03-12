@@ -220,7 +220,7 @@ describe('adition of a blog', () => {
         .expect(400)
         .expect('Content-Type', /application\/json/)
     
-        expect(result.body.error).toContain('username missing')
+        expect(result.body.error).toContain('Path `username` is required')
   
       const usersAtEnd = await helper.usersInDb()
       expect(usersAtEnd).toHaveLength(usersAtStart.length)
