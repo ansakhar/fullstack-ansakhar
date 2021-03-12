@@ -2,8 +2,9 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "title": "IIP",
-    "author": "Joku bloger",
-    "url": "https://www.blogit.fi/trio-miumau-ja-herra-nilsson",
-    "likes": 12 
+    "url": "https://hiidenkivenpuutarhassa.blogspot.com/",
+    "title": "Hiidenkiven puutarhassa",
+    "author": "Minna Heinonen",
+    "userId": "604b2402c86ca98bf8cc6926",
+    "likes": 205
 }

@@ -9,6 +9,16 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 
 describe('when there is initially some blogs saved', () => {
+  
+  beforeEach(async () => {
+    await User.deleteMany({})
+
+    const passwordHash = await bcrypt.hash('sekret', 10)
+    const user = new User({ username: 'root', passwordHash })
+
+    await user.save()
+  })
+
 beforeEach(async () => {
     await Blog.deleteMany({})
     await Blog.insertMany(helper.initialBlogs)
@@ -37,11 +47,15 @@ test('blogs are identified by id', async () => {
 
   describe('addition of a new blog', () => {
 test('a valid blog can be added ', async () => {
+
+    const users = await helper.usersInDb()
+
     const newBlog = {
         title: "Hiidenkiven puutarhassa",
         author: "Minna Heinonen",
         url: "https://hiidenkivenpuutarhassa.blogspot.com/",
-        likes: 205
+        likes: 205,
+        userId: users[0].id
       }
   
     await api
@@ -58,10 +72,14 @@ test('a valid blog can be added ', async () => {
   })
 
   test('a blog without likes adding ', async () => {
+
+    const users = await helper.usersInDb()
+
     const newBlog = {
         title: "Trio MiuMau ja herra Nilsson",
         author: "Elena Kivinen",
-        url: "https://www.blogit.fi/trio-miumau-ja-herra-nilsson"
+        url: "https://www.blogit.fi/trio-miumau-ja-herra-nilsson",
+        userId: users[0].id
       }
   
       const response = await api
@@ -77,9 +95,12 @@ test('a valid blog can be added ', async () => {
   })
 
 test('blog without url is not added', async () => {
-    const newBlog = {
+  const users = await helper.usersInDb()
+  
+  const newBlog = {
         title: "Trio MiuMau ja herra Nilsson",
-        author: "Elena Kivinen"
+        author: "Elena Kivinen",
+        userId: users[0].id
       }
   
     await api
@@ -133,14 +154,6 @@ describe('adition of a blog', () => {
   })
 
   describe('when there is initially one user at db', () => {
-    beforeEach(async () => {
-      await User.deleteMany({})
-  
-      const passwordHash = await bcrypt.hash('sekret', 10)
-      const user = new User({ username: 'root', passwordHash })
-  
-      await user.save()
-    })
   
     test('creation succeeds with a fresh username', async () => {
       const usersAtStart = await helper.usersInDb()
