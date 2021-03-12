@@ -4,7 +4,9 @@ const User = require('../models/user')
 
 usersRouter.post('/', async (request, response) => {
   const body = request.body
-
+  if ( (body.password === undefined)||(body.password.length < 3)) {
+    response.status(400).json({error:"a password of at least three characters was expacted"})
+  } else{
   const saltRounds = 10
   const passwordHash = await bcrypt.hash(body.password, saltRounds)
 
@@ -14,9 +16,14 @@ usersRouter.post('/', async (request, response) => {
     passwordHash,
   })
 
-  const savedUser = await user.save()
+  if (body.username === undefined) {
+    response.status(400).json({error:"username missing"})
+  } else{
 
+  const savedUser = await user.save()
   response.json(savedUser)
+  }
+}
 })
 
 usersRouter.get('/', async (request, response) => {
