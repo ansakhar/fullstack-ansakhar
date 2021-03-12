@@ -15,16 +15,12 @@ blogsRouter.post('/', async (request, response, next) => {
     url: body.url,
     likes: body.likes || 0,
   })
-  try{
   if (body.url === undefined) {
     response.status(400).end()
   } else{
   const savedBlog = await blog.save()
       response.json(savedBlog.toJSON())
  }
-} catch (error) {
-  next(error)
-}
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
@@ -39,13 +35,8 @@ blogsRouter.put('/:id', async (request, response, next) => {
     likes: body.likes
   }
 
-  try {
   const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
   response.json(updatedBlog.toJSON())
-  }
-  catch (exception) {
-    next(exception)
-  }
 })
 
 module.exports = blogsRouter
