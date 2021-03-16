@@ -50,6 +50,15 @@ test('a valid blog can be added ', async () => {
 
     const users = await helper.usersInDb()
 
+    const request = await api
+    .post("/api/login")
+    .send({
+      username: "root",
+      password: "sekret"
+    })
+
+    const token = request.body.token
+
     const newBlog = {
         title: "Hiidenkiven puutarhassa",
         author: "Minna Heinonen",
@@ -60,6 +69,7 @@ test('a valid blog can be added ', async () => {
   
     await api
       .post('/api/blogs')
+      .set('Authorization', `bearer ${token}`)
       .send(newBlog)
       .expect(200)
       .expect('Content-Type', /application\/json/)
@@ -75,6 +85,15 @@ test('a valid blog can be added ', async () => {
 
     const users = await helper.usersInDb()
 
+    const request = await api
+    .post("/api/login")
+    .send({
+      username: "root",
+      password: "sekret"
+    })
+
+    const token = request.body.token
+
     const newBlog = {
         title: "Trio MiuMau ja herra Nilsson",
         author: "Elena Kivinen",
@@ -84,6 +103,7 @@ test('a valid blog can be added ', async () => {
   
       const response = await api
       .post('/api/blogs')
+      .set('Authorization', `bearer ${token}`)
       .send(newBlog)
       .expect(200)
       .expect('Content-Type', /application\/json/)
@@ -96,6 +116,15 @@ test('a valid blog can be added ', async () => {
 
 test('blog without url is not added', async () => {
   const users = await helper.usersInDb()
+
+  const request = await api
+      .post("/api/login")
+      .send({
+        username: "root",
+        password: "sekret"
+      })
+
+  const token = request.body.token
   
   const newBlog = {
         title: "Trio MiuMau ja herra Nilsson",
@@ -105,6 +134,7 @@ test('blog without url is not added', async () => {
   
     await api
       .post('/api/blogs')
+      .set('Authorization', `bearer ${token}`)
       .send(newBlog)
       .expect(400)
   
@@ -112,21 +142,69 @@ test('blog without url is not added', async () => {
 
       expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
   })
+
+  test('a blog without token is not added ', async () => {
+
+    const users = await helper.usersInDb()
+
+    const newBlog = {
+        title: "Hiidenkiven puutarhassa",
+        author: "Minna Heinonen",
+        url: "https://hiidenkivenpuutarhassa.blogspot.com/",
+        likes: 205,
+        userId: users[0].id
+      }
+  
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(401)
+      .expect('Content-Type', /application\/json/)
+  
+      const blogsAtEnd = await helper.blogsInDb()
+      expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+  })
+
 })
 
 describe('deletion of a blog', () => {
     test('a blog can be deleted', async () => {
+
+      const users = await helper.usersInDb()
+
+      const request = await api
+      .post("/api/login")
+      .send({
+        username: "root",
+        password: "sekret"
+      })
+
+  const token = request.body.token
+
+      const newBlog = {
+        title: "Trio MiuMau ja herra Nilsson",
+        author: "Elena Kivinen",
+        url: "https://www.blogit.fi/trio-miumau-ja-herra-nilsson",
+        userId: users[0].id
+      }
+
+      await api
+      .post('/api/blogs')
+      .set('Authorization', `bearer ${token}`)
+      .send(newBlog)
+
       const blogsAtStart = await helper.blogsInDb()
-      const blogToDelete = blogsAtStart[0]
+      const blogToDelete = blogsAtStart[blogsAtStart.length-1]
     
       await api
         .delete(`/api/blogs/${blogToDelete.id}`)
+        .set('Authorization', `bearer ${token}`)
         .expect(204)
     
       const blogsAtEnd = await helper.blogsInDb()
     
       expect(blogsAtEnd).toHaveLength(
-        helper.initialBlogs.length - 1
+        helper.initialBlogs.length
       )
     
       const contents = blogsAtEnd.map(blog => blog.id)
