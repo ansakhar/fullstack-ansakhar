@@ -32,11 +32,20 @@ const App = () => {
     blogService
     .create(blogObject)
     .then(returnedBlog => { 
+      setErrorMessage (`a new blog ${newBlog} by ${newAuthor} was added`)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
       setBlogs(blogs.concat(returnedBlog))
       setNewBlog('')
       setNewAuthor('')
       setNewUrl('')
     }) 
+    .catch(error => {
+      setErrorMessage (`error: wrong format`)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)})
   }
 
   const handleBlogChange = (event) => {
@@ -72,7 +81,7 @@ const App = () => {
       setPassword('')
       setUser(user)
     } catch (exception) {
-      setErrorMessage('wrong credentials')
+      setErrorMessage('error: wrong username or password')
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
