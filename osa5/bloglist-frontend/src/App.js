@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import Notification from './components/Notification'
@@ -9,15 +9,11 @@ import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [newBlog, setNewBlog] = useState('')
-  const [newAuthor, setNewAuthor] = useState('')
-  const [newUrl, setNewUrl] = useState('')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
-  const [loginVisible, setLoginVisible] = useState(false)
-  const [blogVisible, setBlogVisible] = useState(true)
   const [user, setUser] = useState(null)
+  const blogFormRef = useRef()
 
   useEffect(() => {
     blogService.getAll()
@@ -26,46 +22,22 @@ const App = () => {
     )  
   }, [])
 
-  const addBlog = (event) => {
-    event.preventDefault()
-    const blogObject = {
-      title: newBlog,
-      author: newAuthor,
-      url: newUrl,
-      
-    }
+  const addBlog = (blogObject) => {
+    blogFormRef.current.toggleVisibility()
     blogService
     .create(blogObject)
     .then(returnedBlog => { 
-      setErrorMessage (`a new blog ${newBlog} by ${newAuthor} was added`)
+      setErrorMessage (`a new blog ${blogObject.title} by ${blogObject.author} was added`)
         setTimeout(() => {
           setErrorMessage(null)
         }, 5000)
       setBlogs(blogs.concat(returnedBlog))
-      setNewBlog('')
-      setNewAuthor('')
-      setNewUrl('')
     }) 
     .catch(error => {
       setErrorMessage (`error: wrong format`)
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)})
-  }
-
-  const handleBlogChange = (event) => {
-    console.log(event.target.value)
-    setNewBlog(event.target.value)
-  }
-
-  const handleAuthorChange = (event) => {
-    console.log(event.target.value)
-    setNewAuthor(event.target.value)
-  }
-
-  const handleUrlChange = (event) => {
-    console.log(event.target.value)
-    setNewUrl(event.target.value)
   }
 
   const handleLogin = async (event) => {
@@ -112,21 +84,8 @@ const App = () => {
   }
 
   const blogForm = () => (
-   <Togglable buttonLabel="new note" buttonLabel2="cancel">
-      <BlogForm
-      
-        onSubmit={addBlog}
-        
-        valueBlog={newBlog}
-        handleChangeBlog={handleBlogChange}
-        
-        valueAuthor={newAuthor}
-        handleChangeAuthor={handleAuthorChange}
-
-        valueUrl={newUrl}
-        handleChangeUrl={handleUrlChange}
-        />
-        
+   <Togglable buttonLabel="new note" buttonLabel2="cancel" ref={blogFormRef}>
+      <BlogForm createBlog={addBlog} /> 
     </Togglable >
   )  
 

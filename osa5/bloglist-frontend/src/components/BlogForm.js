@@ -1,27 +1,55 @@
-import Togglable from './Togglable'
+import React, {useState} from 'react' 
 
-const BlogForm = ({ onSubmit, handleChangeBlog, valueBlog, handleChangeAuthor, valueAuthor, handleChangeUrl, valueUrl}) => {
+const BlogForm = ({createBlog}) => {
+  const [newBlog, setNewBlog] = useState('')
+  const [newAuthor, setNewAuthor] = useState('')
+  const [newUrl, setNewUrl] = useState('')
+
+  const handleBlogChange = (event) => {
+    setNewBlog(event.target.value)
+  }
+
+  const handleAuthorChange = (event) => {
+    setNewAuthor(event.target.value)
+  }
+
+  const handleUrlChange = (event) => {
+    setNewUrl(event.target.value)
+  }
+
+  const addBlog = (event) => {
+    event.preventDefault()
+    createBlog({
+      title: newBlog,
+      author: newAuthor,
+      url: newUrl,  
+    })
+      setNewBlog('')
+      setNewAuthor('')
+      setNewUrl('')
+  }
+
     return (
       <div>
         <h2>create new</h2>
   
-        <form onSubmit={onSubmit}>
+        <form onSubmit={addBlog}>
         <div>
           <input
-            value={valueBlog}
-            onChange={handleChangeBlog}
+            value={newBlog}
+            onChange={handleBlogChange}
           />
         </div>
         <div>
           <input
-            value={valueAuthor}
-            onChange={handleChangeAuthor}
+            value={newAuthor}
+            onChange={handleAuthorChange}
           />
         </div>
         <div>
           <input
-            value={valueUrl}
-            onChange={handleChangeUrl}
+            value={newUrl}
+            onChange={handleUrlChange}
           />
         </div>
         <button type="submit">
