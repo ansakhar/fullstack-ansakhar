@@ -40,6 +40,14 @@ const App = () => {
       }, 5000)})
   }
 
+  const updateBlog = async (blog) => {
+    await blogService
+    .update(blog.id, blog)
+    const index = blogs.findIndex((blogToUpdate) => blogToUpdate.id === blog.id)
+    const updatedBlogs = [...blogs]
+    updatedBlogs[index] = blog
+    setBlogs(updatedBlogs)
+}
   const handleLogin = async (event) => {
     event.preventDefault()
     
@@ -109,7 +117,7 @@ const App = () => {
       {blogForm()}
 
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} updateBlog={updateBlog}/>
       )}
 
     </div>

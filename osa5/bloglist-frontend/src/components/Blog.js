@@ -1,6 +1,18 @@
 import React, {useState} from 'react'
-const Blog = ({blog}) => {
+const Blog = ({blog, updateBlog}) => {
   const [blogView, setBlogView] = useState(false)
+
+  const handleLike = (blog) => {
+    const newBlog = {
+        title: blog.title,
+        url: blog.url,
+        likes: blog.likes + 1,
+        author: blog.author,
+        user: blog.user,
+        id: blog.id
+    }
+    updateBlog(newBlog)
+}
 
   const blogStyle = {
     paddingTop: 10,
@@ -20,7 +32,7 @@ return (
   <div style={blogStyle}>
   {blog.title} <button onClick={() => setBlogView(false)}> hide</button> <br/>
   {blog.url} <br/>
-  {blog.likes} <button onClick={() => console.log("not done yet")}> like</button> <br/>
+  {blog.likes} <button onClick={() => handleLike(blog)}> like</button> <br/>
   {blog.author}
 </div> 
 )
