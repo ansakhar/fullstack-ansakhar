@@ -22,6 +22,15 @@ const App = () => {
     )  
   }, [])
 
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      blogService.setToken(user.token)
+    }
+  }, [])
+
   const addBlog = (blogObject) => {
     blogFormRef.current.toggleVisibility()
     blogService
@@ -31,6 +40,7 @@ const App = () => {
         setTimeout(() => {
           setErrorMessage(null)
         }, 5000)
+        returnedBlog.user=user
       setBlogs(blogs.concat(returnedBlog))
     }) 
     .catch(error => {
@@ -72,6 +82,31 @@ const App = () => {
       }, 5000)
     }
   }
+
+  const handleRemove = async (blog) => {
+  
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`))
+  {
+    try {
+    await blogService
+      .remove(blog.id)
+        setErrorMessage (`${blog.title} was removed`)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+        setBlogs(blogs.filter(b => b.id !== blog.id ))
+      
+    }
+    catch (exception) {
+        setErrorMessage (`Information of ${blog.title} has already been removed from server`)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+          setBlogs(blogs.filter(b => b.id !== blog.id))
+      }
+    
+  }
+   }
 
   const loginForm = () => (
     <Togglable buttonLabel="log in" buttonLabel2="cancel">
@@ -115,9 +150,9 @@ const App = () => {
       <p>{user.name} logged in <button onClick={handleLogout}> logout</button> </p>
 
       {blogForm()}
-      
+
       {blogs.sort((a, b) => b.likes - a.likes).map(blog =>
-        <Blog key={blog.id} blog={blog} updateBlog={updateBlog}/>
+        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} handleRemove={handleRemove} user={user}/>
       )}
 
     </div>

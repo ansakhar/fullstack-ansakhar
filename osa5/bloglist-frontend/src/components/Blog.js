@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-const Blog = ({blog, updateBlog}) => {
+const Blog = ({blog, updateBlog, handleRemove, user}) => {
   const [blogView, setBlogView] = useState(false)
 
   const handleLike = (blog) => {
@@ -28,14 +28,26 @@ const Blog = ({blog, updateBlog}) => {
     {blog.title} {blog.author} <button onClick={() => setBlogView(true)}> view</button>
   </div>  
 )}
+if (blog.user.name === user.name)
+ {
 return (
   <div style={blogStyle}>
-  {blog.title} <button onClick={() => setBlogView(false)}> hide</button> <br/>
+  {blog.title} {blog.author} <button onClick={() => setBlogView(false)}> hide</button> <br/>
   {blog.url} <br/>
   {blog.likes} <button onClick={() => handleLike(blog)}> like</button> <br/>
-  {blog.author}
-</div> 
-)
+  {user.name} <br/>
+  
+  <button onClick={() => handleRemove(blog)}> remove</button>
+  </div>)
+}
+return (
+  <div style={blogStyle}>
+  {blog.title} {blog.author} <button onClick={() => setBlogView(false)}> hide</button> <br/>
+  {blog.url} <br/>
+  {blog.likes} <button onClick={() => handleLike(blog)}> like</button> <br/>
+  {user.name}
+  </div>)
+
   }
 
 export default Blog
