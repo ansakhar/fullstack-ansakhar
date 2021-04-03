@@ -35,7 +35,7 @@ return (
   {blog.title} {blog.author} <button onClick={() => setBlogView(false)}> hide</button> <br/>
   {blog.url} <br/>
   {blog.likes} <button onClick={() => handleLike(blog)}> like</button> <br/>
-  {user.name} <br/>
+  {blog.user.name} <br/>
   
   <button onClick={() => handleRemove(blog)}> remove</button>
   </div>)
@@ -45,7 +45,7 @@ return (
   {blog.title} {blog.author} <button onClick={() => setBlogView(false)}> hide</button> <br/>
   {blog.url} <br/>
   {blog.likes} <button onClick={() => handleLike(blog)}> like</button> <br/>
-  {user.name}
+  {blog.user.name}
   </div>)
 
   }
