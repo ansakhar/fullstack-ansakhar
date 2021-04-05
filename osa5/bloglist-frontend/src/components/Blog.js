@@ -1,5 +1,5 @@
-import React, {useState} from 'react'
-const Blog = ({blog, updateBlog, handleRemove, user}) => {
+import React, { useState } from 'react'
+const Blog = ({ blog, updateBlog, handleRemove, user }) => {
   const [blogView, setBlogView] = useState(false)
 
   const handleLike = (blog) => {
@@ -26,7 +26,7 @@ const Blog = ({blog, updateBlog, handleRemove, user}) => {
   return (
     <div style={blogStyle}>
     {blog.title} {blog.author} <button onClick={() => setBlogView(true)}> view</button>
-  </div>  
+  </div>
 )}
 if (blog.user.name === user.name)
  {
@@ -36,7 +36,7 @@ return (
   {blog.url} <br/>
   {blog.likes} <button onClick={() => handleLike(blog)}> like</button> <br/>
   {blog.user.name} <br/>
-  
+
   <button onClick={() => handleRemove(blog)}> remove</button>
   </div>)
 }

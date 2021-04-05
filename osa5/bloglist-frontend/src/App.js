@@ -5,7 +5,7 @@ import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
-import loginService from './services/login' 
+import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -19,7 +19,7 @@ const App = () => {
     blogService.getAll()
     .then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -35,16 +35,16 @@ const App = () => {
     blogFormRef.current.toggleVisibility()
     blogService
     .create(blogObject)
-    .then(returnedBlog => { 
+    .then(returnedBlog => {
       setErrorMessage (`a new blog ${blogObject.title} by ${blogObject.author} was added`)
         setTimeout(() => {
           setErrorMessage(null)
         }, 5000)
         returnedBlog.user=user
       setBlogs(blogs.concat(returnedBlog))
-    }) 
-    .catch(error => {
-      setErrorMessage (`error: wrong format`)
+    })
+    .catch(() => {
+      setErrorMessage ('error: wrong format')
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)})
@@ -60,7 +60,7 @@ const App = () => {
 }
   const handleLogin = async (event) => {
     event.preventDefault()
-    
+
     try {
       const user = await loginService.login({
         username, password,
@@ -68,10 +68,10 @@ const App = () => {
 
       window.localStorage.setItem(
         'loggedBlogappUser', JSON.stringify(user)
-      ) 
+      )
 
       blogService.setToken(user.token)
-  
+
       setUsername('')
       setPassword('')
       setUser(user)
@@ -84,7 +84,7 @@ const App = () => {
   }
 
   const handleRemove = async (blog) => {
-  
+
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`))
   {
     try {
@@ -95,7 +95,7 @@ const App = () => {
           setErrorMessage(null)
         }, 5000)
         setBlogs(blogs.filter(b => b.id !== blog.id ))
-      
+
     }
     catch (exception) {
         setErrorMessage (`Information of ${blog.title} has already been removed from server`)
@@ -104,7 +104,7 @@ const App = () => {
         }, 5000)
           setBlogs(blogs.filter(b => b.id !== blog.id))
       }
-    
+
   }
    }
 
@@ -119,18 +119,18 @@ const App = () => {
           />
           </Togglable>
   )
-  
+
   const handleLogout = () => {
-    console.log("logout")
+    console.log('logout')
     window.localStorage.removeItem('loggedBlogappUser')
     setUser(null)
   }
 
   const blogForm = () => (
    <Togglable buttonLabel="create new blog" buttonLabel2="cancel" ref={blogFormRef}>
-      <BlogForm createBlog={addBlog} /> 
+      <BlogForm createBlog={addBlog} />
     </Togglable >
-  )  
+  )
 
   if (user === null) {
     return (
@@ -141,9 +141,9 @@ const App = () => {
       </div>
     )
   }
-      
+
   return (
-    
+
     <div>
       <h2>blogs</h2>
       <Notification message={errorMessage} />
