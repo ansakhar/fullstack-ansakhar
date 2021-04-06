@@ -1,6 +1,6 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
-import { render } from '@testing-library/react'
+import { render, fireEvent } from '@testing-library/react'
 import Blog from './Blog'
 
 test('Component renders title and author, but does not render url and likes', () => {
@@ -32,4 +32,33 @@ test('Component renders title and author, but does not render url and likes', ()
   expect(component.container).not.toHaveTextContent(
     1
   )
+})
+
+test('clicking the button renders url and likes', async () => {
+    const blog = {
+        title: 'Component testing is done with react-testing-library',
+        author: 'Blogs author',
+        url: 'www.url.fi',
+        likes: 12,
+        user: { name: 'users name' }
+      }
+    const user = {
+        name: 'users name'
+    }
+  
+    const mockHandler = jest.fn()
+  
+    const component = render(
+      <Blog blog={blog} user = {user} toggleImportance={mockHandler} />
+    )
+  
+    const button = component.getByText('view')
+    fireEvent.click(button)
+
+    component.debug()
+
+    expect(component.container).toHaveTextContent(
+        'www.url.fi'
+      )
+    expect(component.container).toHaveTextContent(12)
 })
