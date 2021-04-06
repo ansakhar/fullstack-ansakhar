@@ -49,7 +49,7 @@ test('clicking the button renders url and likes', async () => {
     const mockHandler = jest.fn()
   
     const component = render(
-      <Blog blog={blog} user = {user} toggleImportance={mockHandler} />
+      <Blog blog={blog} user = {user} />
     )
   
     const button = component.getByText('view')
@@ -61,4 +61,32 @@ test('clicking the button renders url and likes', async () => {
         'www.url.fi'
       )
     expect(component.container).toHaveTextContent(12)
+})
+
+test('clicking the button likes', async () => {
+    const blog = {
+        title: 'Component testing is done with react-testing-library',
+        author: 'Blogs author',
+        url: 'www.url.fi',
+        likes: 12,
+        user: { name: 'users name' }
+      }
+    const user = {
+        name: 'users name'
+    }
+  
+    const mockHandler = jest.fn()
+  
+    const component = render(
+      <Blog blog={blog} user = {user} updateBlog = {mockHandler} />
+    )
+  
+    const button = component.getByText('view')
+    fireEvent.click(button)
+
+    const buttonLikes = component.getByText('like')
+    fireEvent.click(buttonLikes)
+    fireEvent.click(buttonLikes)
+
+    expect(mockHandler.mock.calls).toHaveLength(2)
 })
