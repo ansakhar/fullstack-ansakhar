@@ -89,4 +89,5 @@ test('clicking the button likes', async () => {
     fireEvent.click(buttonLikes)
 
     expect(mockHandler.mock.calls).toHaveLength(2)
+
 })
