@@ -8,8 +8,10 @@ import { notificationChange } from '../reducers/notificationReducer'
 const AnecdoteList = () => {
 
   const dispatch = useDispatch()
-  const anecdotes = useSelector(state => state.anecdotes)
-  //const notification = useSelector(state => state.notification)
+
+  const anecdotes = useSelector(({ filter, anecdotes }) => {
+    return anecdotes.filter(anecdote => anecdote.content.toLowerCase().includes(filter.toLowerCase()))
+  })
 
   return (
 <div>
